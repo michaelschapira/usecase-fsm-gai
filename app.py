@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Load the data from the Excel file
-data = pd.read_excel('FSSGenAI-usecases.xlsx', sheet_name='Sheet1')
+data = pd.read_excel('FSSgenAI-usecases.xlsx', sheet_name='Sheet1')
 
 # Extract the sales plays and priority areas from the data
 sales_plays = data['Sales Play'].unique().tolist()
