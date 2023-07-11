@@ -38,19 +38,24 @@ fm_capabilities.insert(0, 'ALL')
 selected_priority_area = st.sidebar.selectbox('Select Priority Area', priority_areas)
 selected_fm_capability = st.sidebar.selectbox('Select FM Capability', fm_capabilities)
 
-# Define the text input search
-search_input = st.sidebar.text_input('Search')
-
-# Filter the data based on the selected priority area, FM capability, and search input
 filtered_data = data[
     ((data['Priority Area'] == selected_priority_area) | (selected_priority_area == 'ALL')) &
     ((data['FM Capability'] == selected_fm_capability) | (selected_fm_capability == 'ALL'))
 ]
 
+# Define the text input search
+#search_input = st.sidebar.text_input('Search')
+
+search_terms = st.sidebar.text_input("Search (separate terms with commas):").strip().split(",")
+if search_terms:
+    for term in search_terms:
+        search_results = filtered_data.apply(lambda x: x.astype(str).str.contains(term.strip(), case=False)).any(axis=1)
+        filtered_data = filtered_data[search_results]
+
 # Perform search across all columns
-if search_input:
-    search_results = filtered_data.apply(lambda row: row.astype(str).str.contains(search_input, case=False).any(), axis=1)
-    filtered_data = filtered_data[search_results]
+#if search_input:
+#    search_results = filtered_data.apply(lambda row: row.astype(str).str.contains(search_input, case=False).any(), axis=1)
+#    filtered_data = filtered_data[search_results]
 
 # Display the filtered data in a styled table with a neutral color scheme
 st.header('Generative AI Use Cases')
