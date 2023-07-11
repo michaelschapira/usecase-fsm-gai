@@ -16,14 +16,18 @@ priority_areas.insert(0, 'ALL')
 selected_sales_play = st.sidebar.selectbox('Select Sales Play', sales_plays)
 selected_priority_area = st.sidebar.selectbox('Select Priority Area', priority_areas)
 
-# Filter the data based on the selected dropdowns
+# Define the text input search
+search_input = st.sidebar.text_input('Search')
+
+# Filter the data based on the selected dropdowns and search input
 filtered_data = data[
     ((data['Sales Play'] == selected_sales_play) | (selected_sales_play == 'ALL')) &
-    ((data['Priority Area'] == selected_priority_area) | (selected_priority_area == 'ALL'))
+    ((data['Priority Area'] == selected_priority_area) | (selected_priority_area == 'ALL')) &
+    (data['Use Case'].str.contains(search_input, case=False))  # Filter based on search input
 ]
 
 # Display the filtered data in a styled table
-st.header('Filtered Entries')
+st.header('Generative AI Use Cases')  # Updated header text
 if not filtered_data.empty:
     styled_table = filtered_data[['Priority Area', 'Sales Play', 'Use Case', 'Description', 'LOB', 'Additional LOB']].style \
         .set_properties(**{'background-color': 'lightblue',
