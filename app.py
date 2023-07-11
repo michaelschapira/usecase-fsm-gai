@@ -22,10 +22,22 @@ filtered_data = data[
     ((data['Priority Area'] == selected_priority_area) | (selected_priority_area == 'ALL'))
 ]
 
-# Display the filtered data in a table
-st.header('Generative AI Use Cases')
+# Display the filtered data in a styled table
+st.header('Filtered Entries')
 if not filtered_data.empty:
-    st.table(filtered_data[['Priority Area', 'Sales Play','Use Case', 'Description', 'LOB', 'Additional LOB']])
+    styled_table = filtered_data[['Priority Area', 'Sales Play', 'Use Case', 'Description', 'LOB', 'Additional LOB']].style \
+        .set_properties(**{'background-color': 'lightblue',
+                           'color': 'black',
+                           'text-align': 'left',
+                           'border-color': 'white'}) \
+        .highlight_max(axis=0, color='yellow') \
+        .highlight_min(axis=0, color='lightgreen') \
+        .set_table_styles([{'selector': 'th',
+                            'props': [('background-color', 'steelblue'),
+                                      ('color', 'white'),
+                                      ('font-weight', 'bold'),
+                                      ('text-align', 'left')]}])
+    st.dataframe(styled_table)
 else:
     st.write('No entries found matching the selected criteria.')
 
