@@ -4,7 +4,7 @@ import numpy as np
 import smtplib
 
 # Load the data from the Excel file
-data = pd.read_excel('FSSgenAI-usecases.xlsx', sheet_name='Sheet1')
+data = pd.read_excel('FSSgenAI-usecases-app.xlsx', sheet_name='Sheet1')
 
 # Extract the priority areas and FM capabilities from the data
 priority_areas = data['Priority Area'].unique().tolist()
@@ -54,35 +54,8 @@ if not filtered_data.empty:
         .applymap(lambda x: 'font-weight: bold', subset=['Use Case'])
 
     # Add a button to send email
-    st.sidebar.markdown('**Send Email**')
-    email_button = st.sidebar.button('Send Email to cgorham@ibm.com to add use cases, links to assets and identify yourself as a primary contact.')
+    st.sidebar.markdown('Send Email to cgorham@ibm.com and Trinh.Le@ibm.com with additional use case ideas, assets and to designate yourself a primary contact.')
 
-    if email_button:
-        # Code to send email goes here
-        receiver_email = 'cgorham@ibm.com'
-        subject = 'Generative AI Use Cases'
-        body = 'Hello Caroline, \n\nHere are the generative AI use cases:\n\n' + filtered_data.to_string()
-
-        try:
-            # Setup SMTP server
-            smtp_server = 'smtp.gmail.com'
-            port = 587  # For starttls
-            sender_email = 'your-email@gmail.com'  # Update with your email address
-            password = 'your-password'  # Update with your email password
-
-            # Start the SMTP session
-            with smtplib.SMTP(smtp_server, port) as server:
-                server.starttls()
-                server.login(sender_email, password)
-
-                # Compose and send the email
-                message = f'Subject: {subject}\n\n{body}'
-                server.sendmail(sender_email, receiver_email, message)
-
-                st.sidebar.success('Email sent successfully!')
-        except Exception as e:
-            st.sidebar.error('An error occurred while sending the email.')
-            st.sidebar.exception(e)
 
     # Display the styled table
     st.dataframe(styled_table)
