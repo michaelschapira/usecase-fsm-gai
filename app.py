@@ -26,14 +26,15 @@ filtered_data = data[
     (data['Use Case'].str.contains(search_input, case=False))  # Filter based on search input
 ]
 
-# Display the filtered data in a styled table
-st.header('Generative AI Use Cases')  # Updated header text
+# Display the filtered data in a styled table with wrapped text
+st.header('Generative AI Use Cases')
 if not filtered_data.empty:
     styled_table = filtered_data[['Priority Area', 'Sales Play', 'Use Case', 'Description', 'LOB', 'Additional LOB']].style \
         .set_properties(**{'background-color': 'lightblue',
                            'color': 'black',
                            'text-align': 'left',
-                           'border-color': 'white'}) \
+                           'border-color': 'white',
+                           'white-space': 'pre-wrap'}) \
         .highlight_max(axis=0, color='yellow') \
         .highlight_min(axis=0, color='lightgreen') \
         .set_table_styles([{'selector': 'th',
