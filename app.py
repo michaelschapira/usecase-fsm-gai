@@ -5,6 +5,10 @@ import smtplib
 import base64
 import io 
 
+# Set the layout to wide mode
+st.set_page_config(layout="wide")
+st.header('Generative AI Use Cases')
+
 def get_table_download_link(df):
     # Create an in-memory Excel file stream
     excel_file = io.BytesIO()
@@ -35,8 +39,8 @@ priority_areas.insert(0, 'ALL')
 fm_capabilities.insert(0, 'ALL')
 
 # Define the dropdown list selectors
-selected_priority_area = st.sidebar.selectbox('Select Priority Area', priority_areas)
-selected_fm_capability = st.sidebar.selectbox('Select FM Capability', fm_capabilities)
+selected_priority_area = st.selectbox('Select Priority Area', priority_areas)
+selected_fm_capability = st.selectbox('Select FM Capability', fm_capabilities)
 
 filtered_data = data[
     ((data['Priority Area'] == selected_priority_area) | (selected_priority_area == 'ALL')) &
@@ -46,7 +50,7 @@ filtered_data = data[
 # Define the text input search
 #search_input = st.sidebar.text_input('Search')
 
-search_terms = st.sidebar.text_input("Search (separate terms with commas):").strip().split(",")
+search_terms = st.text_input("Search (separate terms with commas):").strip().split(",")
 if search_terms:
     for term in search_terms:
         search_results = filtered_data.apply(lambda x: x.astype(str).str.contains(term.strip(), case=False)).any(axis=1)
@@ -58,7 +62,6 @@ if search_terms:
 #    filtered_data = filtered_data[search_results]
 
 # Display the filtered data in a styled table with a neutral color scheme
-st.header('Generative AI Use Cases')
 if not filtered_data.empty:
     # Reset index to remove the default index count
     filtered_data.reset_index(drop=True, inplace=True)
@@ -79,19 +82,20 @@ styled_table = filtered_data.style \
                                   ('color', 'white'),
                                   ('font-weight', 'bold'),
                                   ('text-align', 'left')]}]) \
-    .apply(apply_background_color, axis=1)
+    .apply(apply_background_color, axis=1).hide(axis='index')
+
 
 # Display the styled table
-st.dataframe(styled_table)
+st.dataframe(styled_table.hide(), height=600)
 
 # Add a button to download the table in XLSX format
 if len(filtered_data) > 0:
-    st.sidebar.markdown("<h3 style='text-align: center;'>Download Table</h3>", unsafe_allow_html=True)
-    st.sidebar.markdown(get_table_download_link(filtered_data), unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>Download Table</h3>", unsafe_allow_html=True)
+    st.markdown(get_table_download_link(filtered_data), unsafe_allow_html=True)
 
 
 # Add a button to send email
-st.sidebar.markdown('Send Email to cgorham@ibm.com and Trinh.Le@ibm.com with additional use case ideas, assets and to designate yourself a primary contact.')
+st.markdown('Send Email to cgorham@ibm.com and Trinh.Le@ibm.com with additional use case ideas, assets and to designate yourself a primary contact.')
 
 
 
