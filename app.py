@@ -37,28 +37,30 @@ st.header('Generative AI Use Cases')
 if not filtered_data.empty:
     # Reset index to remove the default index count
     filtered_data.reset_index(drop=True, inplace=True)
-
-    # Apply styling to the table
-    styled_table = filtered_data.style \
-        .set_properties(**{'background-color': 'white',
-                           'color': 'black',
-                           'text-align': 'left',
-                           'border-color': 'white',
-                           'white-space': 'pre-wrap'}) \
-        .set_table_styles([{'selector': 'th',
-                            'props': [('background-color', '#003e63'),
-                                      ('color', 'white'),
-                                      ('font-weight', 'bold'),
-                                      ('text-align', 'left')]}]) \
-        .set_caption('Generative AI Use Cases') \
-        .applymap(lambda x: 'font-weight: bold', subset=['Use Case'])
-
-    # Add a button to send email
-    st.sidebar.markdown('Send Email to cgorham@ibm.com and Trinh.Le@ibm.com with additional use case ideas, assets and to designate yourself a primary contact.')
-
-
-    # Display the styled table
-    st.dataframe(styled_table)
 else:
     st.write('No entries found matching the selected criteria.')
+
+def apply_background_color(row):
+    return ['background-color: #f2f2f2' if row.name % 2 != 0 else '' for _ in row]
+
+styled_table = filtered_data.style \
+    .set_properties(**{'background-color': 'white',
+                       'color': 'black',
+                       'text-align': 'left',
+                       'border-color': 'white',
+                       'white-space': 'pre-wrap'}) \
+    .set_table_styles([{'selector': 'th',
+                        'props': [('background-color', '#003e63'),
+                                  ('color', 'white'),
+                                  ('font-weight', 'bold'),
+                                  ('text-align', 'left')]}]) \
+    .apply(apply_background_color, axis=1)
+
+# Display the styled table
+st.dataframe(styled_table)
+
+# Add a button to send email
+st.sidebar.markdown('Send Email to cgorham@ibm.com and Trinh.Le@ibm.com with additional use case ideas, assets and to designate yourself a primary contact.')
+
+
 
